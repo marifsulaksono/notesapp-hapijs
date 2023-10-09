@@ -1,12 +1,16 @@
 const { nanoid } = require('nanoid')
 const { notes, addNote } = require('./notes')
 
-const getAllNotes = () => ({
-  status: 'success',
-  data: {
-    notes
-  }
-})
+const getAllNotes = (request, h) => {
+  const response = h.response({
+    status: 'success',
+    data: {
+      notes
+    }
+  })
+
+  return response
+}
 
 const getNotesById = (request, h) => {
   const { id } = request.params
@@ -42,7 +46,6 @@ const addNoteHandler = (request, h) => {
     id, title, tags, body, createdAt, updatedAt
   }
 
-  console.log({ notes, newNote })
   addNote(newNote)
   const isSuccess = notes.filter((notes) => notes.id === id).length > 0
 
@@ -51,7 +54,7 @@ const addNoteHandler = (request, h) => {
       status: 'success',
       message: 'Catatan berhasil ditambahkan',
       data: {
-        notes
+        noteId: id
       }
     })
     response.code(201)
