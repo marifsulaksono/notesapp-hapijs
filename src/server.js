@@ -14,11 +14,17 @@ const UserValidator = require('./validator/users')
 const authentications = require('./api/authentications')
 const AuthenticationService = require('./service/postgres/authenticationService')
 const AuthenticationValidator = require('./validator/authentication')
+
+const collaborations = require('./api/collaborations')
+const CollaborationService = require('./service/postgres/collaborationService')
+const CollaborationValidator = require('./validator/collaboration')
+
 const TokenManager = require('./tokenize/tokenManager')
 const ClientError = require('./exceptions/ClientError')
 
 const init = async () => {
-  const notesService = new NotesService()
+  const collaborationService = new CollaborationService()
+  const notesService = new NotesService(collaborationService)
   const userService = new UserService()
   const authenticationService = new AuthenticationService()
   const server = Hapi.server({
@@ -75,6 +81,14 @@ const init = async () => {
         userService,
         tokenManager: TokenManager,
         validator: AuthenticationValidator
+      }
+    },
+    {
+      plugin: collaborations,
+      options: {
+        collaborationService,
+        noteService: notesService,
+        validator: CollaborationValidator
       }
     }
   ])

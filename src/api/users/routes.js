@@ -5,6 +5,11 @@ const routes = (handler) => [
         handler: handler.getUserByIdHandler
     },
     {
+        method: 'GET',
+        path: '/users',
+        handler: handler.getUsersByUsernameHandler
+    },
+    {
         method: 'POST',
         path: '/users',
         handler: handler.postUserHandler
