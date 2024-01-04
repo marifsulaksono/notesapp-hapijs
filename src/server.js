@@ -19,6 +19,10 @@ const collaborations = require('./api/collaborations')
 const CollaborationService = require('./service/postgres/collaborationService')
 const CollaborationValidator = require('./validator/collaboration')
 
+const _exports = require('./api/exports')
+const ProducerService = require('./service/rabbitmq/producerService')
+const ExportsValidator = require('./validator/exports')
+
 const TokenManager = require('./tokenize/tokenManager')
 const ClientError = require('./exceptions/ClientError')
 
@@ -90,6 +94,13 @@ const init = async () => {
         noteService: notesService,
         validator: CollaborationValidator
       }
+    },
+    {
+      plugin: _exports,
+      options: {
+        service: ProducerService,
+        validator: ExportsValidator
+      }
     }
   ])
 
@@ -117,6 +128,7 @@ const init = async () => {
       })
 
       newResponse.code(500)
+      console.log(response.message)
       return newResponse
     }
 
