@@ -30,12 +30,15 @@ const uploads = require('./api/uploads')
 const StorageService = require('./service/AmazonS3/storageService')
 const UploadsValidator = require('./validator/uploads')
 
+const CacheService = require('./service/redis/cacheService')
+
 const TokenManager = require('./tokenize/tokenManager')
 const ClientError = require('./exceptions/ClientError')
 
 const init = async () => {
-  const collaborationService = new CollaborationService()
-  const notesService = new NotesService(collaborationService)
+  const cacheService = new CacheService()
+  const collaborationService = new CollaborationService(cacheService)
+  const notesService = new NotesService(collaborationService, cacheService)
   const userService = new UserService()
   const authenticationService = new AuthenticationService()
   // const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'))
