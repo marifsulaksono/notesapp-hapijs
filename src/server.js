@@ -26,7 +26,8 @@ const ProducerService = require('./service/rabbitmq/producerService')
 const ExportsValidator = require('./validator/exports')
 
 const uploads = require('./api/uploads')
-const StorageService = require('./service/postgres/storageService')
+// const StorageService = require('./service/storage/storageService')
+const StorageService = require('./service/AmazonS3/storageService')
 const UploadsValidator = require('./validator/uploads')
 
 const TokenManager = require('./tokenize/tokenManager')
@@ -37,7 +38,8 @@ const init = async () => {
   const notesService = new NotesService(collaborationService)
   const userService = new UserService()
   const authenticationService = new AuthenticationService()
-  const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'))
+  // const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'))
+  const storageService = new StorageService()
   const server = Hapi.server({
     port: process.env.PORT,
     host: process.env.HOST,
